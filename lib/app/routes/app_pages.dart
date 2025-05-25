@@ -1,0 +1,48 @@
+import 'package:get/get.dart';
+
+import '../modules/HomePage/bindings/home_page_binding.dart';
+import '../modules/HomePage/views/home_page_view.dart';
+import '../modules/landing_page/bindings/landing_page_binding.dart';
+import '../modules/landing_page/views/landing_page_view.dart';
+import '../modules/login_page/bindings/login_page_binding.dart';
+import '../modules/login_page/views/login_page_view.dart';
+import '../modules/lupa_password/bindings/lupa_password_binding.dart';
+import '../modules/lupa_password/views/lupa_password_view.dart';
+import '../modules/register_page/bindings/register_page_binding.dart';
+import '../modules/register_page/views/register_page_view.dart';
+
+part 'app_routes.dart';
+
+class AppPages {
+  AppPages._();
+
+  static const INITIAL = Routes.LANDING_PAGE;
+
+  static final routes = [
+    GetPage(
+      name: Routes.LANDING_PAGE,
+      page: () => LandingPage(),
+      binding: LandingPageBinding(),
+    ),
+    GetPage(
+      name: Routes.LOGIN_PAGE,
+      page: () => LoginPageView(),
+      binding: LoginPageBinding(),
+    ),
+    GetPage(
+      name: Routes.REGISTER_PAGE,
+      page: () => RegisterPageView(),
+      binding: RegisterPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.LUPA_PASSWORD,
+      page: () => LupaPasswordView(),
+      binding: LupaPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.HOME_PAGE,
+      page: () => HomePageView(),
+      binding: HomePageBinding(),
+    ),
+  ];
+}

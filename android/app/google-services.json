@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "861140304120",
+    "project_id": "toko-roti-4b40d",
+    "storage_bucket": "toko-roti-4b40d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861140304120:android:94df59e477e317a99dfb0d",
+        "android_client_info": {
+          "package_name": "com.toko_roti.toko_roti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfhvQdI0NB6q5mJ13HvDxUrFnkMKTbA6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
