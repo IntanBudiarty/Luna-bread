@@ -1,6 +1,5 @@
 # toko_roti
-
-A new Flutter project.
+Aplikasi ecommerct toko roti tugas besar proyek mobille apps
 
 ## Getting Started
 
