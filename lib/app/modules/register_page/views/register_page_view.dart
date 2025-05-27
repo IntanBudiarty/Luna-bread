@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import '../controllers/register_page_controller.dart';
 
 class RegisterPageView extends StatelessWidget {
