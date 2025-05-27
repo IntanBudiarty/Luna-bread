@@ -55,6 +55,8 @@ class HomePageView extends GetView<HomePageController> {
           height: 80,
         ),
 
+        Row(
+          children: [
         // Cart Icon on the right
         IconButton(
           icon: const Icon(Icons.shopping_cart, size: 30, color: Colors.brown),
@@ -63,6 +65,9 @@ class HomePageView extends GetView<HomePageController> {
             print('Cart tapped!');
           },
         ),
+            IconButton(onPressed: () {}, icon: Icon(Icons.logout)),
+          ],
+        )
       ],
     );
   }

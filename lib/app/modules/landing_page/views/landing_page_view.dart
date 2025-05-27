@@ -62,12 +62,9 @@ class LandingPage extends StatelessWidget {
                   const SizedBox(height: 30),
                   // Gambar Roti
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Image.asset(
-                        'assets/bread.png',
-                        fit: BoxFit.contain,
-                      ),
+                    child: Image.asset(
+                      'assets/bread.png',
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   // Tagline

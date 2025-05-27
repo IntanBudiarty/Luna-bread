@@ -28,9 +28,15 @@ class RegisterPageController extends GetxController {
         return;
       }
 
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passController.text,
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text,
+            password: passController.text,
+          );
+      await userCredential.user!.sendEmailVerification();
+      Get.snackbar(
+        "Pendaftaran Berhasil",
+        "Pendaftaran Berhasil Silahkan Cek Email Anda",
       );
       Get.offAllNamed('/login-page');
     } catch (e) {

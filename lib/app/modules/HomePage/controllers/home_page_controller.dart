@@ -1,23 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:toko_roti/app/routes/app_pages.dart';
 
 class HomePageController extends GetxController {
-  //TODO: Implement HomePageController
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void logout() async {
+    try {
+      await auth.signOut();
+      Get.offAllNamed(Routes.LOGIN_PAGE);
+    } catch (e) {
+      Get.snackbar("GAGAL", "Terjadi Kesalahan Saat Logout, ${e}");
+    }
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
