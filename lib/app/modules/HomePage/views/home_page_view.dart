@@ -57,17 +57,26 @@ class HomePageView extends GetView<HomePageController> {
 
         Row(
           children: [
-        // Cart Icon on the right
-        IconButton(
-          icon: const Icon(Icons.shopping_cart, size: 30, color: Colors.brown),
-          onPressed: () {
-            // Add functionality for the cart icon
-            print('Cart tapped!');
-          },
-        ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.logout)),
+            // Cart Icon on the right
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+                size: 30,
+                color: Colors.brown,
+              ),
+              onPressed: () {
+                // Add functionality for the cart icon
+                print('Cart tapped!');
+              },
+            ),
+            IconButton(
+              onPressed: () {
+                controller.logout();
+              },
+              icon: Icon(Icons.logout),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
