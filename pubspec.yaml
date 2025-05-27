@@ -71,6 +71,8 @@ flutter:
     - assets/home/tawar.png
     - assets/home/manis.png
     - assets/search.png
+    - assets/bread/roti1.json
+    - assets/bread/roti2.json
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
