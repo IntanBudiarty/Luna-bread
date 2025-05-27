@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/tambah_roti_controller.dart';
+import '../controllers/edit_roti_controller.dart';
 
 import 'package:lottie/lottie.dart';
 
-class TambahRotiView extends GetView<TambahRotiController> {
-  const TambahRotiView({super.key});
+class EditRotiView extends GetView<EditRotiController> {
+  const EditRotiView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Tambah Roti",
+          "Edit Roti",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFFEBDED4),
@@ -24,7 +24,7 @@ class TambahRotiView extends GetView<TambahRotiController> {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Lottie.asset("assets/bread/roti2.json", height: 350),
+            child: Lottie.asset("assets/bread/roti1.json", height: 350),
           ),
           TextField(
             controller: controller.imageC,
@@ -74,7 +74,7 @@ class TambahRotiView extends GetView<TambahRotiController> {
             () => ElevatedButton(
               onPressed: () {
                 if (controller.isLoading.isFalse) {
-                  controller.addBread();
+                  controller.updateRoti();
                 }
               },
               child: Text(

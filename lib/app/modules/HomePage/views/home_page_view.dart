@@ -319,7 +319,12 @@ class HomePageView extends GetView<HomePageController> {
                               width: 30,
                               height: 30,
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed(
+                                    Routes.EDIT_ROTI,
+                                    arguments: breads[index],
+                                  );
+                                },
                                 icon: Icon(
                                   Icons.edit,
                                   color: Colors.white,
