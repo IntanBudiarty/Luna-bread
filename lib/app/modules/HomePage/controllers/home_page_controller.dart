@@ -9,6 +9,7 @@ class HomePageController extends GetxController {
     try {
       await auth.signOut();
       Get.offAllNamed(Routes.LOGIN_PAGE);
+      Get.snackbar("BERHASIL", "Berhasil Logout");
     } catch (e) {
       Get.snackbar("GAGAL", "Terjadi Kesalahan Saat Logout, ${e}");
     }
