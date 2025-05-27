@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toko_roti/app/routes/app_pages.dart';
 
 import '../controllers/home_page_controller.dart';
 
@@ -9,6 +10,13 @@ class HomePageView extends GetView<HomePageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(Routes.TAMBAH_ROTI);
+        },
+        backgroundColor: Colors.brown,
+        child: Icon(Icons.add, color: Colors.white),
+      ),
       backgroundColor: const Color(0xFFEBDED4),
       body: SingleChildScrollView(
         child: Padding(

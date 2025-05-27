@@ -6,8 +6,8 @@ import '../controllers/lupa_password_controller.dart';
 class LupaPasswordView extends GetView<LupaPasswordController> {
   @override
   Widget build(BuildContext context) {
-    // Menggunakan controller LupaPasswordController
-    final LupaPasswordController controller = Get.put(LupaPasswordController());
+    // // Menggunakan controller LupaPasswordController
+    // final LupaPasswordController controller = Get.put(LupaPasswordController());
 
     return Scaffold(
       appBar: AppBar(title: Text("Reset Password")),
@@ -26,7 +26,7 @@ class LupaPasswordView extends GetView<LupaPasswordController> {
             ),
             // Form Inputan Email
             TextField(
-              onChanged: (value) => controller.email.value = value,
+              controller: controller.emailC,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Masukkan Email',
@@ -37,9 +37,12 @@ class LupaPasswordView extends GetView<LupaPasswordController> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => controller.resetPassword(),
+                onPressed: () {
+                  controller.resetPassword();
+                },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Warna biru
+                  backgroundColor: Color(0xFFF4E9CD),
+                  foregroundColor: Colors.brown, // Warna biru
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10), // Radius sudut
                   ),
@@ -51,7 +54,7 @@ class LupaPasswordView extends GetView<LupaPasswordController> {
                   "Reset Password",
                   style: TextStyle(
                     fontSize: 16, // Ukuran font
-                    color: Colors.white, // Warna teks putih
+                    color: Colors.brown, // Warna teks putih
                   ),
                 ),
               ),

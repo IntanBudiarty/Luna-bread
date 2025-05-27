@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "587896639408",
-    "project_id": "tubes-mobdev",
-    "storage_bucket": "tubes-mobdev.firebasestorage.app"
+    "project_number": "861140304120",
+    "project_id": "toko-roti-4b40d",
+    "storage_bucket": "toko-roti-4b40d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:587896639408:android:8c5d746bdb7986fb5f1075",
+        "mobilesdk_app_id": "1:861140304120:android:94df59e477e317a99dfb0d",
         "android_client_info": {
           "package_name": "com.toko_roti.toko_roti"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBddm3HAQSqiueOC5Wd7DgyYItetDDbzvc"
+          "current_key": "AIzaSyDfhvQdI0NB6q5mJ13HvDxUrFnkMKTbA6g"
         }
       ],
       "services": {

@@ -41,29 +41,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBxKo8KMi0eo3u7nX8mUMf55UJ-KragFBY',
-    appId: '1:587896639408:web:8720cf6b834eec555f1075',
-    messagingSenderId: '587896639408',
-    projectId: 'tubes-mobdev',
-    authDomain: 'tubes-mobdev.firebaseapp.com',
-    storageBucket: 'tubes-mobdev.firebasestorage.app',
-    measurementId: 'G-X5M7P7PZ4Q',
+    apiKey: 'AIzaSyDASATNkfC7BsgJMph5M5Q9SUebXoWkoKs',
+    appId: '1:861140304120:web:fa87c9f0d7732f4f9dfb0d',
+    messagingSenderId: '861140304120',
+    projectId: 'toko-roti-4b40d',
+    authDomain: 'toko-roti-4b40d.firebaseapp.com',
+    storageBucket: 'toko-roti-4b40d.firebasestorage.app',
+    measurementId: 'G-Q1QZXBS2GY',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBddm3HAQSqiueOC5Wd7DgyYItetDDbzvc',
-    appId: '1:587896639408:android:8c5d746bdb7986fb5f1075',
-    messagingSenderId: '587896639408',
-    projectId: 'tubes-mobdev',
-    storageBucket: 'tubes-mobdev.firebasestorage.app',
+    apiKey: 'AIzaSyDfhvQdI0NB6q5mJ13HvDxUrFnkMKTbA6g',
+    appId: '1:861140304120:android:94df59e477e317a99dfb0d',
+    messagingSenderId: '861140304120',
+    projectId: 'toko-roti-4b40d',
+    storageBucket: 'toko-roti-4b40d.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAZZrPJ8NgEvELrSSj4DVf4Avi7BDZqZ2A',
-    appId: '1:587896639408:ios:3017d40243b978e95f1075',
-    messagingSenderId: '587896639408',
-    projectId: 'tubes-mobdev',
-    storageBucket: 'tubes-mobdev.firebasestorage.app',
+    apiKey: 'AIzaSyDYz-RmD-cJ-NR9-skGMfcuHEgVZog-gMw',
+    appId: '1:861140304120:ios:40f686061d7175ab9dfb0d',
+    messagingSenderId: '861140304120',
+    projectId: 'toko-roti-4b40d',
+    storageBucket: 'toko-roti-4b40d.firebasestorage.app',
     iosBundleId: 'com.tokoroti.tokoRoti',
   );
 

@@ -8,6 +8,7 @@ abstract class Routes {
   static const REGISTER_PAGE = _Paths.REGISTER_PAGE;
   static const LUPA_PASSWORD = _Paths.LUPA_PASSWORD;
   static const HOME_PAGE = _Paths.HOME_PAGE;
+  static const TAMBAH_ROTI = _Paths.TAMBAH_ROTI;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const REGISTER_PAGE = '/register-page';
   static const LUPA_PASSWORD = '/lupa-password';
   static const HOME_PAGE = '/home-page';
+  static const TAMBAH_ROTI = '/tambah-roti';
 }
