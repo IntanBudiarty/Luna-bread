@@ -341,7 +341,20 @@ class HomePageView extends GetView<HomePageController> {
                               width: 30,
                               height: 30,
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.defaultDialog(
+                                    title: "Konfirmasi",
+                                    middleText:
+                                        "Yakin ingin menghapus roti ini?",
+                                    textConfirm: "Ya",
+                                    textCancel: "Batal",
+                                    confirmTextColor: Colors.white,
+                                    onConfirm: () {
+                                      controller.hapusRoti(breads[index].id);
+                                      Get.back(); // Tutup dialog
+                                    },
+                                  );
+                                },
                                 icon: Icon(
                                   Icons.delete,
                                   color: Colors.white,

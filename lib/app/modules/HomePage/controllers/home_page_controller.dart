@@ -21,4 +21,13 @@ class HomePageController extends GetxController {
   Stream<QuerySnapshot<Map<String, dynamic>>> getBread() async* {
     yield* await firestore.collection("breads").snapshots();
   }
+
+  void hapusRoti(String docId) async {
+    try {
+      await firestore.collection("breads").doc(docId).delete();
+      Get.snackbar("Sukses", "Roti berhasil dihapus");
+    } catch (e) {
+      Get.snackbar("Error", "Gagal menghapus roti: $e");
+    }
+  }
 }
