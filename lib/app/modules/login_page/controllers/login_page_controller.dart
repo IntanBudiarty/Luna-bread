@@ -20,14 +20,37 @@ class LoginPageController extends GetxController {
 
     try {
       isLoading.value = true;
-
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Jika login berhasil
-      Get.offAllNamed('/home-page');
+      if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        // Jika login berhasil
+        Get.offAllNamed('/home-page');
+      } else {
+        Get.defaultDialog(
+          title:
+              "Email Belum Terverifikasi, Apakah Anda Ingin Verifikasi Ulang?",
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("Tidak", style: TextStyle(color: Colors.white)),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: Colors.blue),
+              onPressed: () {
+                FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                Get.back();
+              },
+              child: Text("Ya", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      }
     } catch (e) {
       _showErrorDialog(
         "Login Gagal",
