@@ -4,6 +4,8 @@ import '../modules/HomePage/bindings/home_page_binding.dart';
 import '../modules/HomePage/views/home_page_view.dart';
 import '../modules/edit_roti/bindings/edit_roti_binding.dart';
 import '../modules/edit_roti/views/edit_roti_view.dart';
+import '../modules/keranjang/bindings/keranjang_binding.dart';
+import '../modules/keranjang/views/keranjang_view.dart';
 import '../modules/landing_page/bindings/landing_page_binding.dart';
 import '../modules/landing_page/views/landing_page_view.dart';
 import '../modules/login_page/bindings/login_page_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.EDIT_ROTI,
       page: () => const EditRotiView(),
       binding: EditRotiBinding(),
+    ),
+    GetPage(
+      name: _Paths.KERANJANG,
+      page: () => const KeranjangView(),
+      binding: KeranjangBinding(),
     ),
   ];
 }
