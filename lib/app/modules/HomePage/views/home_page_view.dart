@@ -138,7 +138,7 @@ class HomePageView extends GetView<HomePageController> {
         const SizedBox(height: 16),
         // Use Expanded to ensure the ListView takes the available space
         SizedBox(
-          height: 120,
+          height: 130,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
@@ -236,136 +236,141 @@ class HomePageView extends GetView<HomePageController> {
               itemCount: breads.length,
               itemBuilder: (context, index) {
                 var data = breads[index].data();
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        blurRadius: 12,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(16),
-                              ),
-                              child: Image.network(
-                                "${data['image_url']}",
-                                height: 160,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                errorBuilder:
-                                    (context, error, stackTrace) =>
-                                        const Icon(Icons.broken_image),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(14),
-                            child: Column(
-                              children: [
-                                Text(
-                                  "${data['bread']}",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-
-                                const SizedBox(height: 8),
-                                Text(
-                                  "Rp ${data['price']}",
-                                  style: const TextStyle(
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "${data['description']}",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Row(
+                return GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.DETAIL_ROTI, arguments: data);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.brown,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              width: 30,
-                              height: 30,
-                              child: IconButton(
-                                onPressed: () {
-                                  Get.toNamed(
-                                    Routes.EDIT_ROTI,
-                                    arguments: breads[index],
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: 19,
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(16),
+                                ),
+                                child: Image.network(
+                                  "${data['image_url']}",
+                                  height: 160,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, error, stackTrace) =>
+                                          const Icon(Icons.broken_image),
                                 ),
                               ),
                             ),
-                            SizedBox(width: 5),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.brown,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              width: 30,
-                              height: 30,
-                              child: IconButton(
-                                onPressed: () {
-                                  Get.defaultDialog(
-                                    title: "Konfirmasi",
-                                    middleText:
-                                        "Yakin ingin menghapus roti ini?",
-                                    textConfirm: "Ya",
-                                    textCancel: "Batal",
-                                    confirmTextColor: Colors.white,
-                                    onConfirm: () {
-                                      controller.hapusRoti(breads[index].id);
-                                      Get.back(); // Tutup dialog
-                                    },
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                  size: 19,
-                                ),
+                            Padding(
+                              padding: const EdgeInsets.all(14),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "${data['bread']}",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    "Rp ${data['price']}",
+                                    style: const TextStyle(
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "${data['description']}",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.brown,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                width: 30,
+                                height: 30,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Get.toNamed(
+                                      Routes.EDIT_ROTI,
+                                      arguments: breads[index],
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 19,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.brown,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                width: 30,
+                                height: 30,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Get.defaultDialog(
+                                      title: "Konfirmasi",
+                                      middleText:
+                                          "Yakin ingin menghapus roti ini?",
+                                      textConfirm: "Ya",
+                                      textCancel: "Batal",
+                                      confirmTextColor: Colors.white,
+                                      onConfirm: () {
+                                        controller.hapusRoti(breads[index].id);
+                                        Get.back(); // Tutup dialog
+                                      },
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 19,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
