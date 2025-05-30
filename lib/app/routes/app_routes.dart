@@ -14,7 +14,7 @@ abstract class Routes {
 }
 
 abstract class _Paths {
-  _Paths._();
+  _Paths();
   static const LANDING_PAGE = '/landing-page';
   static const LOGIN_PAGE = '/login-page';
   static const REGISTER_PAGE = '/register-page';
