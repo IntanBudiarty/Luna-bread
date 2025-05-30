@@ -36,12 +36,6 @@ class HomePageView extends GetView<HomePageController> {
 
               const SizedBox(
                 height: 20,
-              ), // Spacing between search bar and category section
-              // Kategori Horizontal
-              _buildCategorySection(),
-
-              const SizedBox(
-                height: 20,
               ), // Spacing between category section and featured products
               // Produk Unggulan
               _buildFeaturedProducts(),
@@ -120,78 +114,6 @@ class HomePageView extends GetView<HomePageController> {
     );
   }
 
-  // Kategori Section
-  Widget _buildCategorySection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text(
-            'Kategori',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.brown,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        // Use Expanded to ensure the ListView takes the available space
-        SizedBox(
-          height: 130,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              _buildCategoryItem('Tawar', 'assets/home/tawar.png'),
-              const SizedBox(width: 16),
-              _buildCategoryItem('Manis', 'assets/home/manis.png'),
-              const SizedBox(width: 16),
-              _buildCategoryItem('Gandum', 'assets/home/gandum.png'),
-              const SizedBox(width: 16),
-              _buildCategoryItem('Sourdough', 'assets/home/sourdough.png'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Category Item Widget
-  Widget _buildCategoryItem(String title, String imagePath) {
-    return Column(
-      children: [
-        Container(
-          width: 90,
-          height: 90,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-            image: DecorationImage(
-              image: AssetImage(imagePath),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            color: Colors.brown,
-            fontSize: 16,
-          ),
-        ),
-      ],
-    );
-  }
 
   // Featured Products Section
   Widget _buildFeaturedProducts() {
@@ -201,7 +123,7 @@ class HomePageView extends GetView<HomePageController> {
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: Text(
-            'Produk Unggulan',
+            'Produk Kami',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

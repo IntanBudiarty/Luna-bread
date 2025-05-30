@@ -12,7 +12,7 @@ class KeranjangView extends GetView<KeranjangController> {
     return MaterialApp(
       title: 'Shopping Cart',
       theme: ThemeData(primarySwatch: Colors.red, fontFamily: 'Arial'),
-      home: const CartPage(),
+      home: CartPage(),
     );
   }
 }
@@ -23,7 +23,17 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Cart'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('My Cart'),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.black),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

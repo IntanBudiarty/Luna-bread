@@ -72,5 +72,6 @@ class AppPages {
       page: () => const KeranjangView(),
       binding: KeranjangBinding(),
     ),
+  
   ];
 }

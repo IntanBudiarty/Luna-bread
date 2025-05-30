@@ -25,5 +25,4 @@ abstract class _Paths {
   static const EDIT_ROTI = '/edit-roti';
   static const DETAIL_ROTI = '/detail-roti';
   static const KERANJANG = '/keranjang';
-
 }
