@@ -75,6 +75,7 @@ class HomePageView extends GetView<HomePageController> {
               ),
               onPressed: () {
                 // Add functionality for the cart icon
+                Get.toNamed(Routes.KERANJANG);
                 print('Cart tapped!');
               },
             ),

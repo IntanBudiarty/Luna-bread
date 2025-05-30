@@ -171,27 +171,27 @@ class DetailRotiView extends StatelessWidget {
     );
   }
 
-  Widget _quantityPicker() {
-    return Row(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.brown),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Icon(Icons.remove, size: 20, color: Colors.brown),
-        ),
-        const SizedBox(width: 10),
-        const Text("0", style: TextStyle(fontSize: 16)),
-        const SizedBox(width: 10),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.brown),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Icon(Icons.add, size: 20, color: Colors.brown),
-        ),
-      ],
-    );
-  }
+  // Widget _quantityPicker() {
+  //   return Row(
+  //     children: [
+  //       Container(
+  //         decoration: BoxDecoration(
+  //           border: Border.all(color: Colors.brown),
+  //           borderRadius: BorderRadius.circular(12),
+  //         ),
+  //         child: const Icon(Icons.remove, size: 20, color: Colors.brown),
+  //       ),
+  //       const SizedBox(width: 10),
+  //       const Text("0", style: TextStyle(fontSize: 16)),
+  //       const SizedBox(width: 10),
+  //       Container(
+  //         decoration: BoxDecoration(
+  //           border: Border.all(color: Colors.brown),
+  //           borderRadius: BorderRadius.circular(12),
+  //         ),
+  //         child: const Icon(Icons.add, size: 20, color: Colors.brown),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
