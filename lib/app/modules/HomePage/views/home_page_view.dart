@@ -16,7 +16,7 @@ class HomePageView extends GetView<HomePageController> {
           Get.toNamed(Routes.TAMBAH_ROTI);
         },
         backgroundColor: Colors.brown,
-        child: Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
       backgroundColor: const Color(0xFFEBDED4),
       body: SingleChildScrollView(
@@ -25,19 +25,10 @@ class HomePageView extends GetView<HomePageController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Logo and Cart Icon in Row, scrolls with content
               _buildHeader(),
-
-              const SizedBox(
-                height: 20,
-              ), // Spacing between header and search bar
-              // Search Bar
+              const SizedBox(height: 20),
               _buildSearchBar(),
-
-              const SizedBox(
-                height: 20,
-              ), // Spacing between category section and featured products
-              // Produk Unggulan
+              const SizedBox(height: 20),
               _buildFeaturedProducts(),
             ],
           ),
@@ -46,21 +37,17 @@ class HomePageView extends GetView<HomePageController> {
     );
   }
 
-  // Build logo and cart icon in a row, which will scroll with the content
   Widget _buildHeader() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space out the items
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Logo on the left
         Image.asset(
-          'assets/logo.png', // Make sure to have the logo image in the correct folder
+          'assets/logo.png',
           width: 80,
           height: 80,
         ),
-
         Row(
           children: [
-            // Cart Icon on the right
             IconButton(
               icon: const Icon(
                 Icons.shopping_cart,
@@ -68,16 +55,14 @@ class HomePageView extends GetView<HomePageController> {
                 color: Colors.brown,
               ),
               onPressed: () {
-                // Add functionality for the cart icon
                 Get.toNamed(Routes.KERANJANG);
-                print('Cart tapped!');
               },
             ),
             IconButton(
               onPressed: () {
                 controller.logout();
               },
-              icon: Icon(Icons.logout),
+              icon: const Icon(Icons.logout),
             ),
           ],
         ),
@@ -85,7 +70,6 @@ class HomePageView extends GetView<HomePageController> {
     );
   }
 
-  // Search Bar
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
@@ -100,12 +84,15 @@ class HomePageView extends GetView<HomePageController> {
         ],
       ),
       child: TextField(
-        decoration: InputDecoration(
+        onChanged: (value) {
+          controller.searchQuery.value = value;
+        },
+        decoration: const InputDecoration(
           hintText: 'Search',
-          hintStyle: const TextStyle(color: Colors.grey),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          hintStyle: TextStyle(color: Colors.grey),
+          prefixIcon: Icon(Icons.search, color: Colors.grey),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             vertical: 18,
             horizontal: 20,
           ),
@@ -114,8 +101,6 @@ class HomePageView extends GetView<HomePageController> {
     );
   }
 
-
-  // Featured Products Section
   Widget _buildFeaturedProducts() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,173 +117,196 @@ class HomePageView extends GetView<HomePageController> {
           ),
         ),
         const SizedBox(height: 16),
+        Obx(
+          () => StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: controller.breadStream.value,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-        // StreamBuilder untuk ambil data dari Firestore
-        StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: controller.getBread(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
 
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return const Center(child: Text("BELUM ADA DATA ROTI"));
-            }
+              // Filter manual (client-side)
+              var allBreads = snapshot.data!.docs;
+              var breads =
+                  allBreads.where((doc) {
+                    final name = doc['bread'].toString().toLowerCase();
+                    final query = controller.searchQuery.value.toLowerCase();
+                    return name.contains(query);
+                  }).toList();
 
-            var breads = snapshot.data!.docs;
-
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-              ),
-              itemCount: breads.length,
-              itemBuilder: (context, index) {
-                var data = breads[index].data();
-                return GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.DETAIL_ROTI, arguments: data);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          blurRadius: 12,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+              if (breads.isEmpty) {
+                return Center(
+                  child: Text(
+                    controller.searchQuery.value.isEmpty
+                        ? "BELUM ADA DATA ROTI"
+                        : "Tidak ditemukan roti dengan nama '${controller.searchQuery.value}'",
+                    style: const TextStyle(
+                      color: Colors.brown,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                    child: Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(16),
-                                ),
-                                child: Image.network(
-                                  "${data['image_url']}",
-                                  height: 160,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                  errorBuilder:
-                                      (context, error, stackTrace) =>
-                                          const Icon(Icons.broken_image),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(14),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "${data['bread']}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                  ),
+                );
+              }
 
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    "Rp ${data['price']}",
-                                    style: const TextStyle(
-                                      color: Colors.orange,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "${data['description']}",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Row(
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.75,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                ),
+                itemCount: breads.length,
+                itemBuilder: (context, index) {
+                  var data = breads[index].data();
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.DETAIL_ROTI, arguments: data);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            blurRadius: 12,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.brown,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                width: 30,
-                                height: 30,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Get.toNamed(
-                                      Routes.EDIT_ROTI,
-                                      arguments: breads[index],
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                    size: 19,
+                              Expanded(
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(16),
+                                  ),
+                                  child: Image.network(
+                                    "${data['image_url']}",
+                                    height: 160,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.broken_image),
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 5),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.brown,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                width: 30,
-                                height: 30,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Get.defaultDialog(
-                                      title: "Konfirmasi",
-                                      middleText:
-                                          "Yakin ingin menghapus roti ini?",
-                                      textConfirm: "Ya",
-                                      textCancel: "Batal",
-                                      confirmTextColor: Colors.white,
-                                      onConfirm: () {
-                                        controller.hapusRoti(breads[index].id);
-                                        Get.back(); // Tutup dialog
-                                      },
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                    size: 19,
-                                  ),
+                              Padding(
+                                padding: const EdgeInsets.all(14),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "${data['bread']}",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      "Rp ${data['price']}",
+                                      style: const TextStyle(
+                                        color: Colors.orange,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      "${data['description']}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.brown,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  width: 30,
+                                  height: 30,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Get.toNamed(
+                                        Routes.EDIT_ROTI,
+                                        arguments: breads[index],
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                      size: 19,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.brown,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  width: 30,
+                                  height: 30,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Get.defaultDialog(
+                                        title: "Konfirmasi",
+                                        middleText:
+                                            "Yakin ingin menghapus roti ini?",
+                                        textConfirm: "Ya",
+                                        textCancel: "Batal",
+                                        confirmTextColor: Colors.white,
+                                        onConfirm: () {
+                                          controller.hapusRoti(
+                                            breads[index].id,
+                                          );
+                                          Get.back();
+                                        },
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                      size: 19,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
+                  );
+                },
+              );
+            },
+          ),
         ),
       ],
     );

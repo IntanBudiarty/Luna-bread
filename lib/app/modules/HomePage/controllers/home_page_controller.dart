@@ -7,6 +7,23 @@ class HomePageController extends GetxController {
   RxBool isLoading = false.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  RxString searchQuery = ''.obs;
+  late Rx<Stream<QuerySnapshot<Map<String, dynamic>>>> breadStream;
+
+  @override
+  void onInit() {
+    super.onInit();
+    breadStream = Rx(getBreadStream());
+
+    // Update UI saat searchQuery berubah, tapi stream tetap sama
+    ever(searchQuery, (_) {
+      update();
+    });
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getBreadStream() {
+    return firestore.collection("breads").snapshots();
+  }
 
   void logout() async {
     try {
@@ -14,12 +31,8 @@ class HomePageController extends GetxController {
       Get.offAllNamed(Routes.LOGIN_PAGE);
       Get.snackbar("BERHASIL", "Berhasil Logout");
     } catch (e) {
-      Get.snackbar("GAGAL", "Terjadi Kesalahan Saat Logout, ${e}");
+      Get.snackbar("GAGAL", "Terjadi Kesalahan Saat Logout, $e");
     }
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getBread() async* {
-    yield* await firestore.collection("breads").snapshots();
   }
 
   void hapusRoti(String docId) async {
