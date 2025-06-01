@@ -6,6 +6,7 @@ import 'package:toko_roti/app/routes/app_pages.dart';
 class HomePageController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // var tabIndex = 0.obs;
 
   RxString searchQuery = ''.obs;
   late Rx<Stream<QuerySnapshot<Map<String, dynamic>>>> breadStream;

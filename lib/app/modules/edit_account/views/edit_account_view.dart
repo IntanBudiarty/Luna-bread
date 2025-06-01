@@ -15,6 +15,7 @@ class EditAccountView extends GetView<EditAccountController> {
         centerTitle: true,
         backgroundColor: Colors.brown,
       ),
+      backgroundColor: const Color(0xFFEBDED4),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

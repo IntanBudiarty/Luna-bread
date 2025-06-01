@@ -36,19 +36,20 @@ class _CheckoutViewState extends State<CheckoutView> {
     }
   }
 
-  @override
   final List<dynamic> cartItems = Get.arguments ?? [];
   Widget build(BuildContext context) {
     final accountController = Get.put(AccountController());
-    final keranjangController = Get.find<KeranjangController>();
+    Get.find<KeranjangController>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout'),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: const Text('Checkout', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.blue[700],
+        backgroundColor: Colors.brown,
       ),
+      backgroundColor: const Color(0xFFEBDED4),
       body: Obx(() {
         if (accountController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -80,12 +81,12 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Informasi Pengiriman',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: Colors.brown[700],
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -129,12 +130,12 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Detail Pesanan',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: Colors.brown[700],
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -185,8 +186,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                                 ),
                                 Text(
                                   'Rp ${subtotal.toStringAsFixed(0)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.brown[700],
                                   ),
                                 ),
                               ],
@@ -200,11 +202,12 @@ class _CheckoutViewState extends State<CheckoutView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Total Pembayaran',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: Colors.brown[700],
                             ),
                           ),
                           Text(
@@ -212,7 +215,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue[700],
+                              color: Colors.brown[700],
                             ),
                           ),
                         ],
@@ -234,12 +237,12 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Metode Pembayaran',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: Colors.brown[700],
                         ),
                       ),
                       SizedBox(height: 12),
@@ -263,12 +266,12 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Bukti Pembayaran',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: Colors.brown[700],
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -281,13 +284,20 @@ class _CheckoutViewState extends State<CheckoutView> {
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(color: Colors.grey),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.image, size: 40, color: Colors.grey),
+                                Icon(
+                                  Icons.image,
+                                  size: 40,
+                                  color: Colors.brown,
+                                ),
                                 SizedBox(height: 8),
-                                Text('Belum ada gambar'),
+                                Text(
+                                  'Belum ada gambar',
+                                  style: TextStyle(color: Colors.brown[700]),
+                                ),
                               ],
                             ),
                           ),
@@ -307,8 +317,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                         children: [
                           Expanded(
                             child: OutlinedButton.icon(
-                              icon: const Icon(Icons.photo_library),
-                              label: const Text('Galeri'),
+                              icon: const Icon(
+                                Icons.photo_library,
+                                color: Colors.brown,
+                              ),
+                              label: Text(
+                                'Galeri',
+                                style: TextStyle(color: Colors.brown[700]),
+                              ),
                               onPressed: _pickImage,
                               style: OutlinedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
@@ -320,8 +336,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: OutlinedButton.icon(
-                              icon: const Icon(Icons.camera_alt),
-                              label: const Text('Kamera'),
+                              icon: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.brown,
+                              ),
+                              label: Text(
+                                'Kamera',
+                                style: TextStyle(color: Colors.brown[700]),
+                              ),
                               onPressed: _takePhoto,
                               style: OutlinedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
@@ -368,7 +390,11 @@ class _CheckoutViewState extends State<CheckoutView> {
                   },
                   child: const Text(
                     'PROSES PEMBAYARAN',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -386,7 +412,7 @@ class _CheckoutViewState extends State<CheckoutView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: Colors.blue),
+          Icon(icon, size: 20, color: Colors.brown),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
