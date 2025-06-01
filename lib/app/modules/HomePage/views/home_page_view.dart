@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toko_roti/app/routes/app_pages.dart';
-
 import '../controllers/home_page_controller.dart';
 
 class HomePageView extends GetView<HomePageController> {
@@ -54,15 +53,11 @@ class HomePageView extends GetView<HomePageController> {
                 size: 30,
                 color: Colors.brown,
               ),
-              onPressed: () {
-                Get.toNamed(Routes.KERANJANG);
-              },
+              onPressed: () => Get.toNamed(Routes.KERANJANG),
             ),
             IconButton(
-              onPressed: () {
-                controller.logout();
-              },
               icon: const Icon(Icons.logout),
+              onPressed: () => controller.logout(),
             ),
           ],
         ),
@@ -92,10 +87,7 @@ class HomePageView extends GetView<HomePageController> {
           hintStyle: TextStyle(color: Colors.grey),
           prefixIcon: Icon(Icons.search, color: Colors.grey),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            vertical: 18,
-            horizontal: 20,
-          ),
+          contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         ),
       ),
     );
@@ -117,24 +109,23 @@ class HomePageView extends GetView<HomePageController> {
           ),
         ),
         const SizedBox(height: 16),
-        Obx(
-          () => StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: controller.breadStream.value,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+        StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: controller.breadStream.value,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
 
-              // Filter manual (client-side)
-              var allBreads = snapshot.data!.docs;
-              var breads =
+            return Obx(() {
+              final query = controller.searchQuery.value.toLowerCase();
+              final allBreads = snapshot.data!.docs;
+              final breads =
                   allBreads.where((doc) {
                     final name = doc['bread'].toString().toLowerCase();
-                    final query = controller.searchQuery.value.toLowerCase();
                     return name.contains(query);
                   }).toList();
 
@@ -166,149 +157,147 @@ class HomePageView extends GetView<HomePageController> {
                 itemBuilder: (context, index) {
                   var data = breads[index].data();
                   return GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.DETAIL_ROTI, arguments: data);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(16),
-                                  ),
-                                  child: Image.network(
-                                    "${data['image_url']}",
-                                    height: 160,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.broken_image),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(14),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "${data['bread']}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      "Rp ${data['price']}",
-                                      style: const TextStyle(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "${data['description']}",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.brown,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  width: 30,
-                                  height: 30,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Get.toNamed(
-                                        Routes.EDIT_ROTI,
-                                        arguments: breads[index],
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.white,
-                                      size: 19,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.brown,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  width: 30,
-                                  height: 30,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Get.defaultDialog(
-                                        title: "Konfirmasi",
-                                        middleText:
-                                            "Yakin ingin menghapus roti ini?",
-                                        textConfirm: "Ya",
-                                        textCancel: "Batal",
-                                        confirmTextColor: Colors.white,
-                                        onConfirm: () {
-                                          controller.hapusRoti(
-                                            breads[index].id,
-                                          );
-                                          Get.back();
-                                        },
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.white,
-                                      size: 19,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    onTap:
+                        () => Get.toNamed(Routes.DETAIL_ROTI, arguments: data),
+                    child: _buildBreadCard(
+                      data,
+                      breads[index].id,
+                      breads[index],
                     ),
                   );
                 },
               );
-            },
-          ),
+            });
+          },
         ),
       ],
+    );
+  }
+
+  Widget _buildBreadCard(
+    Map<String, dynamic> data,
+    String docId,
+    QueryDocumentSnapshot breadDoc,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                  child: Image.network(
+                    data['image_url'],
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) =>
+                            const Icon(Icons.broken_image),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(
+                  children: [
+                    Text(
+                      data['bread'],
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Rp ${data['price']}",
+                      style: const TextStyle(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      data['description'],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.brown,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  width: 30,
+                  height: 30,
+                  child: IconButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.EDIT_ROTI, arguments: breadDoc);
+                    },
+                    icon: const Icon(Icons.edit, color: Colors.white, size: 19),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.brown,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  width: 30,
+                  height: 30,
+                  child: IconButton(
+                    onPressed: () {
+                      Get.defaultDialog(
+                        title: "Konfirmasi",
+                        middleText: "Yakin ingin menghapus roti ini?",
+                        textConfirm: "Ya",
+                        textCancel: "Batal",
+                        confirmTextColor: Colors.white,
+                        onConfirm: () {
+                          controller.hapusRoti(docId);
+                          Get.back();
+                        },
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 19,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

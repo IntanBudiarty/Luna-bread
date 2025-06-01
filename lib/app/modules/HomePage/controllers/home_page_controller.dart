@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:toko_roti/app/routes/app_pages.dart';
 
 class HomePageController extends GetxController {
-  RxBool isLoading = false.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   RxString searchQuery = ''.obs;
   late Rx<Stream<QuerySnapshot<Map<String, dynamic>>>> breadStream;
 
@@ -14,11 +14,6 @@ class HomePageController extends GetxController {
   void onInit() {
     super.onInit();
     breadStream = Rx(getBreadStream());
-
-    // Update UI saat searchQuery berubah, tapi stream tetap sama
-    ever(searchQuery, (_) {
-      update();
-    });
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getBreadStream() {
