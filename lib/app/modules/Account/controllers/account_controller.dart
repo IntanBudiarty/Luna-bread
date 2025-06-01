@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 class AccountController extends GetxController {
   final userData = <String, dynamic>{}.obs;
   final isLoading = true.obs;
+  final anotherAddresses = <Map<String, dynamic>>[].obs; // ← Tambah ini
 
   @override
   void onInit() {
@@ -12,7 +13,6 @@ class AccountController extends GetxController {
     super.onInit();
   }
 
-  // Mengambil data pengguna dari Firestore
   Future<void> fetchUserData() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -25,6 +25,7 @@ class AccountController extends GetxController {
 
         if (doc.exists) {
           userData.value = doc.data()!;
+          await fetchAnotherAddresses(user.uid); // ← Panggil fungsi ini juga
         }
       }
     } catch (e) {
@@ -34,7 +35,21 @@ class AccountController extends GetxController {
     }
   }
 
-  // Fungsi untuk logout
+  Future<void> fetchAnotherAddresses(String uid) async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .collection('anotherAddress') // ← Subcollection
+              .get();
+
+      anotherAddresses.value = snapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      Get.snackbar("Error", "Gagal memuat alamat lainnya");
+    }
+  }
+
   Future<void> logout() async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -43,59 +58,5 @@ class AccountController extends GetxController {
       Get.snackbar("Error", "Gagal logout");
     }
   }
-
-  // Fungsi untuk menambahkan alamat baru
-  Future<void> addAddress(String newAddress) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        // Tambahkan alamat ke daftar alamat pengguna
-        final List addresses = userData['addresses'] ?? [];
-        addresses.add({
-          'address': newAddress,
-          'isDefault': false, // Menandai alamat baru bukan default
-        });
-
-        // Update Firestore dengan alamat baru
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update({'addresses': addresses});
-
-        // Update data lokal
-        userData['addresses'] = addresses;
-      } catch (e) {
-        Get.snackbar("Error", "Gagal menambahkan alamat");
-      }
-    }
-  }
-
-  // Fungsi untuk mengganti alamat default
-  Future<void> setDefaultAddress(int index) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        List addresses = userData['addresses'] ?? [];
-
-        // Set alamat default berdasarkan index
-        for (var addr in addresses) {
-          addr['isDefault'] = false; // Reset semua alamat sebagai bukan default
-        }
-
-        // Menandai alamat yang dipilih sebagai default
-        addresses[index]['isDefault'] = true;
-
-        // Update Firestore dengan alamat default baru
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update({'addresses': addresses});
-
-        // Update data lokal
-        userData['addresses'] = addresses;
-      } catch (e) {
-        Get.snackbar("Error", "Gagal mengganti alamat default");
-      }
-    }
-  }
 }
+

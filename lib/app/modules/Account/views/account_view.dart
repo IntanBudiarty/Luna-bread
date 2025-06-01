@@ -14,6 +14,10 @@ class AccountView extends StatelessWidget {
         title: const Text('Akun Saya'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => controller.fetchUserData(),
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             onPressed: controller.logout,
           ),
@@ -28,8 +32,7 @@ class AccountView extends StatelessWidget {
           return const Center(child: Text('Data pengguna tidak ditemukan'));
         }
 
-        // Pastikan 'addresses' tidak null
-        final addresses = controller.userData['addresses'] ?? [];
+        final anotherAddresses = controller.anotherAddresses;
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -74,7 +77,7 @@ class AccountView extends StatelessWidget {
               _buildInfoRow('Nomor HP', controller.userData['phone'] ?? '-'),
               _buildInfoRow('Usia', controller.userData['age'] ?? '-'),
 
-              // Menampilkan alamat utama dan alamat lainnya
+              // Alamat utama
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Row(
@@ -96,7 +99,7 @@ class AccountView extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
-                        // Menambahkan alamat, bisa navigasi ke halaman baru
+                        // Navigasi ke halaman tambah alamat
                         Get.toNamed('/add-address');
                       },
                     ),
@@ -104,7 +107,6 @@ class AccountView extends StatelessWidget {
                 ),
               ),
 
-              // Menampilkan daftar alamat
               const SizedBox(height: 12),
               const Text(
                 'Alamat Lainnya',
@@ -116,30 +118,24 @@ class AccountView extends StatelessWidget {
               ),
               const Divider(),
 
-              // Menampilkan semua alamat
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: addresses.length,
-                itemBuilder: (context, index) {
-                  final address = addresses[index];
-                  return ListTile(
-                    title: Text(address['address']),
-                    subtitle:
-                        address['isDefault'] ? const Text('Default') : null,
-                    trailing: IconButton(
-                      icon: const Icon(Icons.check),
-                      onPressed: () {
-                        // Ganti alamat default
-                        controller.setDefaultAddress(index);
-                      },
-                    ),
-                    onTap: () {
-                      // Menampilkan detail alamat atau mengeditnya
+              anotherAddresses.isEmpty
+                  ? const Text('Belum ada alamat tambahan')
+                  : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: anotherAddresses.length,
+                    itemBuilder: (context, index) {
+                      final address = anotherAddresses[index];
+                      return ListTile(
+                        leading: const Icon(Icons.location_on),
+                        title: Text(address['address']),
+                        subtitle:
+                            address['createdAt'] != null
+                                ? Text(address['createdAt'].toDate().toString())
+                                : null,
+                      );
                     },
-                  );
-                },
-              ),
+                  ),
 
               const SizedBox(height: 32),
 

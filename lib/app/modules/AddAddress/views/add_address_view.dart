@@ -1,9 +1,11 @@
-// add_address_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toko_roti/app/modules/AddAddress/controllers/add_address_controller.dart';
 
 class AddAddressView extends StatelessWidget {
-  final TextEditingController addressController = TextEditingController();
+  final AddAddressController controller = Get.put(AddAddressController());
+
+  AddAddressView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +22,24 @@ class AddAddressView extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: addressController,
+              controller: controller.addressController,
               decoration: const InputDecoration(
                 labelText: 'Alamat',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Simpan alamat baru dan navigasi kembali ke halaman akun
-                // Anda bisa menambahkan logika penyimpanan alamat di sini
-                Get.back();
-              },
-              child: const Text('Simpan Alamat'),
+            Obx(
+              () => ElevatedButton(
+                onPressed:
+                    controller.isLoading.value
+                        ? null
+                        : () => controller.saveAddress(),
+                child:
+                    controller.isLoading.value
+                        ? const CircularProgressIndicator()
+                        : const Text('Simpan Alamat'),
+              ),
             ),
           ],
         ),
