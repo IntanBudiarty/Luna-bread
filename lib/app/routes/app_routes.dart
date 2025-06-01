@@ -14,6 +14,8 @@ abstract class Routes {
   static const KERANJANG = _Paths.KERANJANG;
   static const ACCOUNT = _Paths.ACCOUNT;
   static const ADD_ADDRESS = _Paths.ADD_ADDRESS;
+  static const PAYMENT_METHOD_DROPDOWN = _Paths.PAYMENT_METHOD_DROPDOWN;
+  static const CHECKOUT = _Paths.CHECKOUT;
 }
 
 abstract class _Paths {
@@ -29,6 +31,6 @@ abstract class _Paths {
   static const KERANJANG = '/keranjang';
   static const ACCOUNT = '/account';
   static const ADD_ADDRESS = '/add-address';
-  static const ACCOUNT = '/account';
-  static const ADD_ADDRESS = '/add-address';
+  static const PAYMENT_METHOD_DROPDOWN = '/payment-method-dropdown';
+  static const CHECKOUT = '/checkout';
 }
