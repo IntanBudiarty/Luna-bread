@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPageController extends GetxController {
   var emailController = TextEditingController();
@@ -24,8 +25,10 @@ class LoginPageController extends GetxController {
         email: email,
         password: password,
       );
-
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        // Menyimpan userId setelah login berhasil
+        await saveUserId(FirebaseAuth.instance.currentUser!.uid);
+
         // Jika login berhasil
         Get.offAllNamed('/home-page');
       } else {
@@ -59,6 +62,12 @@ class LoginPageController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  // Fungsi untuk menyimpan userId ke SharedPreferences
+  Future<void> saveUserId(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', userId); // Menyimpan ID pengguna
   }
 
   void _showErrorDialog(String title, String message) {

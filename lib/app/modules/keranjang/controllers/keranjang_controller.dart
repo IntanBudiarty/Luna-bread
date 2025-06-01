@@ -7,16 +7,31 @@ class KeranjangController extends GetxController {
   final selectedIds = <String>[].obs;
   final totalHarga = 0.0.obs;
 
+  String? userId;
+
   @override
   void onInit() {
     super.onInit();
-    _loadKeranjang();
+    _loadUserId(); // Memuat userId ketika aplikasi dimulai
   }
 
-  // Load data keranjang dari SharedPreferences
-  Future<void> _loadKeranjang() async {
+  // Load userId dari SharedPreferences
+  Future<void> _loadUserId() async {
     final prefs = await SharedPreferences.getInstance();
-    final String? keranjangData = prefs.getString('keranjang');
+    userId = prefs.getString('userId'); // Memuat userId yang disimpan
+    if (userId != null) {
+      await _loadKeranjang(); // Jika userId ditemukan, load keranjang
+    }
+  }
+
+  // Load keranjang berdasarkan userId
+  Future<void> _loadKeranjang() async {
+    if (userId == null) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final String? keranjangData = prefs.getString(
+      'keranjang_$userId',
+    ); // Menyimpan keranjang dengan key unik berdasarkan userId
 
     if (keranjangData != null) {
       final List<dynamic> decodedItems = json.decode(keranjangData);
@@ -25,13 +40,19 @@ class KeranjangController extends GetxController {
     }
   }
 
-  // Simpan data keranjang ke SharedPreferences
+  // Simpan keranjang dengan userId sebagai bagian dari key
   Future<void> _saveKeranjang() async {
+    if (userId == null) return;
+
     final prefs = await SharedPreferences.getInstance();
     final String encodedItems = json.encode(items);
-    await prefs.setString('keranjang', encodedItems);
+    await prefs.setString(
+      'keranjang_$userId',
+      encodedItems,
+    ); // Simpan data keranjang dengan kunci berbasis userId
   }
 
+  // Menambahkan produk ke keranjang
   void tambahProduk(Map<String, dynamic> produk) {
     final index = items.indexWhere((item) => item['id'] == produk['id']);
 
@@ -48,6 +69,7 @@ class KeranjangController extends GetxController {
     items.refresh();
   }
 
+  // Toggle pilihan produk
   void togglePilihan(String productId) {
     if (selectedIds.contains(productId)) {
       selectedIds.remove(productId);
@@ -59,7 +81,7 @@ class KeranjangController extends GetxController {
     _saveKeranjang(); // Simpan data setelah toggle pilihan
   }
 
-  // Tambah jumlah produk
+  // Menambah jumlah produk
   void tambahJumlah(int index) {
     items[index] = {
       ...items[index],
@@ -70,7 +92,7 @@ class KeranjangController extends GetxController {
     items.refresh();
   }
 
-  // Kurangi jumlah produk
+  // Mengurangi jumlah produk
   void kurangJumlah(int index) {
     final currentQty = items[index]['quantity'] ?? 1;
 
@@ -86,7 +108,7 @@ class KeranjangController extends GetxController {
     items.refresh();
   }
 
-  // Hitung total harga
+  // Menghitung total harga
   void hitungTotal() {
     double total = 0.0;
 
@@ -100,6 +122,7 @@ class KeranjangController extends GetxController {
     totalHarga.value = total;
   }
 
+  // Menghapus produk terpilih
   void hapusProdukTerpilih() {
     items.removeWhere((item) => selectedIds.contains(item['id']));
     selectedIds.clear();
