@@ -6,9 +6,12 @@ import '../controllers/home_page_controller.dart';
 
 class HomePageView extends GetView<HomePageController> {
   const HomePageView({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
+    Get.put(HomePageController(), permanent: true);
+
     return Scaffold(
       backgroundColor: const Color(0xFFEBDED4),
       body: SafeArea(
@@ -219,7 +222,7 @@ class HomePageView extends GetView<HomePageController> {
         ),
         const SizedBox(height: 16),
         StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: controller.breadStream.value,
+          stream: controller.breadStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(

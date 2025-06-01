@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:toko_roti/app/modules/HomePage/views/home_page_view.dart'; // Pastikan halaman Home sudah ada
+import 'package:toko_roti/app/modules/HomePage/views/home_page_view.dart';
+import 'package:toko_roti/app/routes/app_pages.dart'; // Pastikan halaman Home sudah ada
 
 class OrdersView extends StatelessWidget {
   const OrdersView({super.key});
@@ -182,7 +183,7 @@ class OrdersView extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Navigasi kembali ke halaman Home
-                  Get.offAll(() => HomePageView());
+                  Get.offAllNamed(Routes.HOME_PAGE);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.brown,

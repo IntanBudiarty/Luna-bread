@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toko_roti/app/modules/Account/controllers/account_controller.dart';
-import 'package:toko_roti/app/modules/Orders/views/orders_view.dart';
 import 'package:toko_roti/app/modules/keranjang/controllers/keranjang_controller.dart';
 import 'package:toko_roti/app/modules/payment_method_dropdown/views/payment_method_dropdown_view.dart';
 import 'package:image_picker/image_picker.dart';
