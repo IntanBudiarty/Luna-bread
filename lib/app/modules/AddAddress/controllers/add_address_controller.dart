@@ -31,8 +31,9 @@ class AddAddressController extends GetxController {
           .add({'address': address, 'createdAt': FieldValue.serverTimestamp()});
 
       Get.back(); // kembali ke halaman sebelumnya
+      Get.snackbar("BERHASIL", "Alamat Berhasil Di Tambahkan");
     } catch (e) {
-      Get.snackbar('Gagal', 'Gagal menyimpan alamat: $e');
+      Get.snackbar('GAGAL', 'Gagal menyimpan alamat: $e');
     } finally {
       isLoading.value = false;
     }
