@@ -212,12 +212,10 @@ class KeranjangView extends StatelessWidget {
                           controller.selectedIds.isEmpty
                               ? null
                               : () {
-                                // Proses checkout
-                                Get.snackbar(
-                                  'Berhasil',
-                                  '${controller.selectedIds.length} produk dipesan',
-                                  snackPosition: SnackPosition.BOTTOM,
-                                );
+                                // Navigasi ke halaman Checkout
+                                Get.toNamed(
+                                  '/checkout',
+                                ); // Arahkan ke halaman Checkout
                               },
                       child: const Text(
                         'Pesan Sekarang',
