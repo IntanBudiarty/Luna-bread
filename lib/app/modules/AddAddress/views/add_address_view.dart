@@ -11,22 +11,36 @@ class AddAddressView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tambah Alamat')),
+      backgroundColor: const Color(0xFFEBDED4),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        title: const Text(
+          'Tambah Alamat',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.brown,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Masukkan Alamat Baru',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.brown[700],
+              ),
             ),
             const SizedBox(height: 20),
             TextField(
               controller: controller.addressController,
               decoration: const InputDecoration(
                 labelText: 'Alamat',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -39,7 +53,11 @@ class AddAddressView extends StatelessWidget {
                 child:
                     controller.isLoading.value
                         ? const CircularProgressIndicator()
-                        : const Text('Simpan Alamat'),
+                        : const Text(
+                          'Simpan Alamat',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
               ),
             ),
           ],
