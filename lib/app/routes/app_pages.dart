@@ -10,6 +10,8 @@ import '../modules/HomePage/bindings/home_page_binding.dart';
 import '../modules/HomePage/views/home_page_view.dart';
 import '../modules/detail_roti/bindings/detail_roti_binding.dart';
 import '../modules/detail_roti/views/detail_roti_view.dart';
+import '../modules/edit_account/bindings/edit_account_binding.dart';
+import '../modules/edit_account/views/edit_account_view.dart';
 import '../modules/edit_roti/bindings/edit_roti_binding.dart';
 import '../modules/edit_roti/views/edit_roti_view.dart';
 import '../modules/keranjang/bindings/keranjang_binding.dart';
@@ -92,11 +94,11 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.CHECKOUT,
-      page: () => const CheckoutView(),
+      page: () =>  CheckoutView(),
       binding: CheckoutBinding(),
     ),
     GetPage(
-      name: _Paths.PAYMENT_METHOD_DROPDOWN,
+      name: _Paths PAYMENT_METHOD_DROPDOWN,
       page: () => PaymentMethodDropdown(),
       binding: PaymentMethodDropdownBinding(),
     ),

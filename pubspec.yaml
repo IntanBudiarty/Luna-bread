@@ -75,6 +75,7 @@ flutter:
     - assets/search.png
     - assets/bread/roti1.json
     - assets/bread/roti2.json
+    - assets/lottie/edit_profile.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

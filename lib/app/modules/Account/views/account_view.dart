@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:toko_roti/app/routes/app_pages.dart';
 import '../controllers/account_controller.dart';
 
 class AccountView extends StatelessWidget {
@@ -10,12 +12,15 @@ class AccountView extends StatelessWidget {
     final controller = Get.put(AccountController());
 
     return Scaffold(
+      backgroundColor: const Color(0xFFEBDED4),
       appBar: AppBar(
-        title: const Text('Akun Saya'),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Akun Saya', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.brown,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: controller.logout,
+            icon: const Icon(Icons.refresh),
+            onPressed: controller.fetchUserData,
           ),
         ],
       ),
@@ -28,135 +33,160 @@ class AccountView extends StatelessWidget {
           return const Center(child: Text('Data pengguna tidak ditemukan'));
         }
 
-        // Pastikan 'addresses' tidak null
-        final addresses = controller.userData['addresses'] ?? [];
-
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header dengan foto profil
-              Center(
-                child: Column(
-                  children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage(
-                        'assets/images/default_profile.png',
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      controller.userData['fullName'] ?? 'Nama tidak tersedia',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+        return Stack(
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProfileHeader(controller),
+                  const SizedBox(height: 32),
+                  _buildInfoSection(controller),
+                  const SizedBox(height: 12),
+                  _buildAddressSection(controller),
+                  const SizedBox(height: 12),
+                  _buildAnotherAddressSection(controller),
+                  const SizedBox(height: 32),
+                ],
+              ),
+            ),
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: ElevatedButton(
+                onPressed: () => Get.toNamed(Routes.EDIT_ACCOUNT),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.brown,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text(
+                  'Edit Profil',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 32),
-
-              // Info Akun
-              const Text(
-                'Informasi Akun',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
-              ),
-              const Divider(),
-              _buildInfoRow('Nama Lengkap', controller.userData['fullName']),
-              _buildInfoRow('Email', controller.userData['email']),
-              _buildInfoRow('Nomor HP', controller.userData['phone'] ?? '-'),
-              _buildInfoRow('Usia', controller.userData['age'] ?? '-'),
-
-              // Menampilkan alamat utama dan alamat lainnya
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 120,
-                      child: Text(
-                        'Alamat',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
-                        controller.userData['address'] ?? '-',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        // Menambahkan alamat, bisa navigasi ke halaman baru
-                        Get.toNamed('/add-address');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
-              // Menampilkan daftar alamat
-              const SizedBox(height: 12),
-              const Text(
-                'Alamat Lainnya',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
-              ),
-              const Divider(),
-
-              // Menampilkan semua alamat
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: addresses.length,
-                itemBuilder: (context, index) {
-                  final address = addresses[index];
-                  return ListTile(
-                    title: Text(address['address']),
-                    subtitle:
-                        address['isDefault'] ? const Text('Default') : null,
-                    trailing: IconButton(
-                      icon: const Icon(Icons.check),
-                      onPressed: () {
-                        // Ganti alamat default
-                        controller.setDefaultAddress(index);
-                      },
-                    ),
-                    onTap: () {
-                      // Menampilkan detail alamat atau mengeditnya
-                    },
-                  );
-                },
-              ),
-
-              const SizedBox(height: 32),
-
-              // Tombol Edit Profil
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Get.toNamed('/edit-profile'),
-                  child: const Text('Edit Profil'),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       }),
     );
   }
+
+  Widget _buildProfileHeader(AccountController controller) {
+    return Center(
+      child: Column(
+        children: [
+          const CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.grey,
+            backgroundImage: AssetImage('assets/images/default_profile.png'),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            controller.userData['fullName'] ?? 'Nama tidak tersedia',
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(AccountController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Informasi Akun',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown,
+          ),
+        ),
+        const Divider(),
+        _buildInfoRow('Nama Lengkap', controller.userData['fullName'] ?? '-'),
+        _buildInfoRow('Email', controller.userData['email'] ?? '-'),
+        _buildInfoRow('Nomor HP', controller.userData['phone'] ?? '-'),
+        _buildInfoRow('Usia', controller.userData['age']?.toString() ?? '-'),
+      ],
+    );
+  }
+
+  Widget _buildAddressSection(AccountController controller) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 120,
+          child: Text('Alamat', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            controller.userData['address'] ?? '-',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => Get.toNamed('/add-address'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAnotherAddressSection(AccountController controller) {
+    return Obx(() {
+      if (controller.anotherAddress.isEmpty) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          child: Text('Tidak ada alamat tambahan yang valid'),
+        );
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Alamat Lainnya',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.brown,
+            ),
+          ),
+          const Divider(),
+          ...controller.anotherAddress.map((address) {
+            final createdAt =
+                address['createdAt'] is Timestamp
+                    ? (address['createdAt'] as Timestamp)
+                        .toDate()
+                        .toLocal()
+                        .toString()
+                    : address['createdAt'].toString();
+
+            return Card(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                tileColor: Colors.brown[100],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                leading: const Icon(Icons.location_on, color: Colors.brown),
+                title: Text(address['address'] ?? ''),
+                subtitle: Text('Ditambahkan: $createdAt'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.brown),
+                  onPressed:
+                      () => controller.deleteAnotherAddress(address['id']),
+                ),
+              ),
+            );
+          }).toList(),
+        ],
+    );
+    });
+}
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(

@@ -55,6 +55,9 @@ class HomePageView extends GetView<HomePageController> {
 
             // PopupMenuButton untuk dropdown Akun dan Logout
             PopupMenuButton<String>(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
               icon: const Icon(
                 Icons.account_circle,
                 size: 30,
