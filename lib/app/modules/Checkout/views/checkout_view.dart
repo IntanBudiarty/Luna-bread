@@ -6,6 +6,8 @@ import 'package:toko_roti/app/modules/payment_method_dropdown/views/payment_meth
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'package:toko_roti/app/routes/app_pages.dart';
+
 class CheckoutView extends StatefulWidget {
   const CheckoutView({super.key});
 
@@ -35,11 +37,10 @@ class _CheckoutViewState extends State<CheckoutView> {
     }
   }
 
-  @override
   final List<dynamic> cartItems = Get.arguments ?? [];
   Widget build(BuildContext context) {
     final accountController = Get.put(AccountController());
-    final keranjangController = Get.find<KeranjangController>();
+    Get.find<KeranjangController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -188,7 +189,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                   'Rp ${subtotal.toStringAsFixed(0)}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.brown[700]
+                                    color: Colors.brown[700],
                                   ),
                                 ),
                               ],
@@ -207,7 +208,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.brown[700]
+                              color: Colors.brown[700],
                             ),
                           ),
                           Text(
@@ -365,6 +366,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    Get.back();
                     Get.snackbar('BERHASIL', 'Checkout berhasil');
                   },
                   style: ElevatedButton.styleFrom(
