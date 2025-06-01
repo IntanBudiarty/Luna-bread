@@ -65,5 +65,14 @@ class AppPages {
       page: () => const DetailRotiView(),
       binding: DetailRotiBinding(),
     ),
+<<<<<<< HEAD
+=======
+    GetPage(
+      name: _Paths.KERANJANG,
+      page: () => const KeranjangView(),
+      binding: KeranjangBinding(),
+    ),
+  
+>>>>>>> 2e5028287ea58ff24f7e60edfb752205d6ca3bcd
   ];
 }

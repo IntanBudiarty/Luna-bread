@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +7,7 @@ class TambahRotiController extends GetxController {
   RxBool isLoading = false.obs;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
+  RxString selectedCategory = ''.obs;
 
   TextEditingController imageC = TextEditingController();
   TextEditingController breadC = TextEditingController();
@@ -27,6 +26,7 @@ class TambahRotiController extends GetxController {
           "bread": breadC.text,
           "price": priceC.text,
           "description": descriptionC.text,
+          "category": selectedCategory.value,
           "createdAt": DateTime.now().toIso8601String(),
         });
         isLoading == false;
