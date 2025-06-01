@@ -11,10 +11,7 @@ abstract class Routes {
   static const TAMBAH_ROTI = _Paths.TAMBAH_ROTI;
   static const EDIT_ROTI = _Paths.EDIT_ROTI;
   static const DETAIL_ROTI = _Paths.DETAIL_ROTI;
-<<<<<<< HEAD
-=======
   static const KERANJANG = _Paths.KERANJANG;
->>>>>>> 2e5028287ea58ff24f7e60edfb752205d6ca3bcd
 }
 
 abstract class _Paths {
@@ -27,8 +24,5 @@ abstract class _Paths {
   static const TAMBAH_ROTI = '/tambah-roti';
   static const EDIT_ROTI = '/edit-roti';
   static const DETAIL_ROTI = '/detail-roti';
-<<<<<<< HEAD
-=======
   static const KERANJANG = '/keranjang';
->>>>>>> 2e5028287ea58ff24f7e60edfb752205d6ca3bcd
 }

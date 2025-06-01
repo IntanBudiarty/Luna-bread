@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:toko_roti/app/modules/keranjang/bindings/keranjang_binding.dart';
+import 'package:toko_roti/app/modules/keranjang/views/keranjang_view.dart';
 
 import '../modules/HomePage/bindings/home_page_binding.dart';
 import '../modules/HomePage/views/home_page_view.dart';
@@ -65,14 +67,10 @@ class AppPages {
       page: () => const DetailRotiView(),
       binding: DetailRotiBinding(),
     ),
-<<<<<<< HEAD
-=======
     GetPage(
       name: _Paths.KERANJANG,
-      page: () => const KeranjangView(),
+      page: () => KeranjangView(),
       binding: KeranjangBinding(),
     ),
-  
->>>>>>> 2e5028287ea58ff24f7e60edfb752205d6ca3bcd
   ];
 }
