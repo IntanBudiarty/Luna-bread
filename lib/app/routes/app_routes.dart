@@ -10,10 +10,11 @@ abstract class Routes {
   static const HOME_PAGE = _Paths.HOME_PAGE;
   static const TAMBAH_ROTI = _Paths.TAMBAH_ROTI;
   static const EDIT_ROTI = _Paths.EDIT_ROTI;
+  static const DETAIL_ROTI = _Paths.DETAIL_ROTI;
 }
 
 abstract class _Paths {
-  _Paths._();
+  _Paths();
   static const LANDING_PAGE = '/landing-page';
   static const LOGIN_PAGE = '/login-page';
   static const REGISTER_PAGE = '/register-page';
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const HOME_PAGE = '/home-page';
   static const TAMBAH_ROTI = '/tambah-roti';
   static const EDIT_ROTI = '/edit-roti';
+  static const DETAIL_ROTI = '/detail-roti';
 }
