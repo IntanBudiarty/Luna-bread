@@ -1,222 +1,236 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../controllers/keranjang_controller.dart';
 
-class KeranjangView extends GetView<KeranjangController> {
+class KeranjangView extends StatelessWidget {
   const KeranjangView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shopping Cart',
-      theme: ThemeData(primarySwatch: Colors.red, fontFamily: 'Arial'),
-      home: CartPage(),
-    );
-  }
-}
+    final controller = Get.find<KeranjangController>();
 
-class CartPage extends StatelessWidget {
-  const CartPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Cart'),
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: const [
-                  CartItem(name: 'Roti Tawar Putih', price: 13000, quantity: 1),
-                  SizedBox(height: 16),
-                  CartItem(name: 'Roti Panggang', price: 26000, quantity: 2),
-                ],
-              ),
+        title: const Text('Keranjang Belanja'),
+        actions: [
+          Obx(
+            () => IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed:
+                  controller.selectedIds.isEmpty
+                      ? null
+                      : () {
+                        controller.hapusProdukTerpilih();
+                        Get.snackbar(
+                          'Berhasil',
+                          'Produk terpilih telah dihapus',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      },
             ),
-            const OrderSummary(),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  'Checkout',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
-}
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() {
+              if (controller.items.isEmpty) {
+                return const Center(child: Text('Keranjang belanja kosong'));
+              }
 
-class CartItem extends StatelessWidget {
-  final String name;
-  final int price;
-  final int quantity;
+              return ListView.builder(
+                itemCount: controller.items.length,
+                itemBuilder: (context, index) {
+                  final item = controller.items[index];
+                  final isSelected = controller.selectedIds.contains(
+                    item['id'],
+                  );
+                  final harga = double.tryParse(item['price'].toString()) ?? 0;
+                  final jumlah = item['quantity'] ?? 1;
+                  final subtotal = harga * jumlah;
 
-  const CartItem({
-    super.key,
-    required this.name,
-    required this.price,
-    required this.quantity,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Rp. ${price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}',
-                    style: TextStyle(color: Colors.red[700], fontSize: 14),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(30, 30),
-                        ),
-                        child: const Text(
-                          'Update',
-                          style: TextStyle(color: Colors.grey),
+                    color: isSelected ? Colors.grey[100] : Colors.white,
+                    child: InkWell(
+                      onTap: () => controller.togglePilihan(item['id']),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            // Checkbox
+                            Checkbox(
+                              value: isSelected,
+                              onChanged:
+                                  (_) => controller.togglePilihan(item['id']),
+                              activeColor: Colors.brown,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            ),
+
+                            // Gambar Produk
+                            if (item['image_url']?.toString().isNotEmpty ==
+                                true)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    item['image_url'],
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (_, __, ___) => Container(
+                                          width: 50,
+                                          height: 50,
+                                          color: Colors.grey[200],
+                                          child: const Icon(
+                                            Icons.bakery_dining,
+                                          ),
+                                        ),
+                                  ),
+                                ),
+                              ),
+
+                            // Info Produk
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item['bread'] ?? 'Produk',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Rp ${harga.toStringAsFixed(0)}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // Kontrol Jumlah
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove, size: 20),
+                                  onPressed:
+                                      () => controller.kurangJumlah(index),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                ),
+                                Container(
+                                  width: 30,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    jumlah.toString(),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add, size: 20),
+                                  onPressed:
+                                      () => controller.tambahJumlah(index),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                ),
+                              ],
+                            ),
+
+                            // Subtotal
+                            Container(
+                              width: 80,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'Rp ${subtotal.toStringAsFixed(0)}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(30, 30),
-                        ),
-                        child: const Text(
-                          'Delete',
-                          style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                },
+              );
+            }),
+          ),
+
+          // Total Harga dan Checkout
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(top: BorderSide(color: Colors.grey.shade300)),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Total Harga:', style: TextStyle(fontSize: 16)),
+                    Obx(
+                      () => Text(
+                        'Rp ${controller.totalHarga.value.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.brown,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[300]!),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.remove, size: 16),
-                    padding: const EdgeInsets.all(4),
-                    constraints: const BoxConstraints(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      quantity.toString(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: Obx(
+                    () => ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.brown[700],
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed:
+                          controller.selectedIds.isEmpty
+                              ? null
+                              : () {
+                                // Proses checkout
+                                Get.snackbar(
+                                  'Berhasil',
+                                  '${controller.selectedIds.length} produk dipesan',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              },
+                      child: const Text(
+                        'Pesan Sekarang',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add, size: 16),
-                    padding: const EdgeInsets.all(4),
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class OrderSummary extends StatelessWidget {
-  const OrderSummary({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildSummaryRow('Subtotal', 39000),
-            const SizedBox(height: 8),
-            _buildSummaryRow('Tax', 729),
-            const Divider(),
-            _buildSummaryRow('Total', 39729, isTotal: true),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(String label, int amount, {bool isTotal = false}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
           ),
-        ),
-        Text(
-          'Rp. ${amount.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}',
-          style: TextStyle(
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

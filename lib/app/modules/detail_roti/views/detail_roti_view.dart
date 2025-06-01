@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toko_roti/app/modules/keranjang/controllers/keranjang_controller.dart';
 
 class DetailRotiView extends StatelessWidget {
   const DetailRotiView({super.key});
@@ -100,7 +101,7 @@ class DetailRotiView extends StatelessWidget {
                         children: [
                           // _quantityPicker(),
                           Text(
-                            "Rp ${data['price']}",
+                            "Rp. ${data['price']}",
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -114,32 +115,50 @@ class DetailRotiView extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.brown,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          minimumSize: const Size.fromHeight(50),
-                        ),
-                        onPressed: () {
-                          // Tambahkan ke keranjang logika
-                          Get.snackbar(
-                            "Berhasil",
-                            "Roti ditambahkan ke keranjang",
-                          );
-                        },
-                        child: const Text(
-                          "Buy",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
                       Text(
                         data['description'],
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown,
+                          minimumSize: const Size.fromHeight(50),
+                        ),
+                        onPressed: () {
+                          final keranjangController =
+                              Get.find<KeranjangController>();
+                          final productData =
+                              Get.arguments as Map<String, dynamic>;
+
+                          // Pastikan produk memiliki ID unik
+                          final productWithId = {
+                            ...productData,
+                            'id':
+                                productData['id'] ??
+                                'prod_${productData['bread']}_${DateTime.now().millisecondsSinceEpoch}',
+                          };
+
+                          keranjangController.tambahProduk(productWithId);
+
+                          Get.snackbar(
+                            "Berhasil",
+                            "${productData['bread']} ditambahkan ke keranjang",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.green,
+                            colorText: Colors.white,
+                            duration: const Duration(seconds: 2),
+                          );
+
+                          // Opsional: Langsung navigasi ke keranjang
+                          Get.toNamed('/keranjang');
+                        },
+                        child: const Text(
+                          "Buy",
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -170,28 +189,4 @@ class DetailRotiView extends StatelessWidget {
       ],
     );
   }
-
-  // Widget _quantityPicker() {
-  //   return Row(
-  //     children: [
-  //       Container(
-  //         decoration: BoxDecoration(
-  //           border: Border.all(color: Colors.brown),
-  //           borderRadius: BorderRadius.circular(12),
-  //         ),
-  //         child: const Icon(Icons.remove, size: 20, color: Colors.brown),
-  //       ),
-  //       const SizedBox(width: 10),
-  //       const Text("0", style: TextStyle(fontSize: 16)),
-  //       const SizedBox(width: 10),
-  //       Container(
-  //         decoration: BoxDecoration(
-  //           border: Border.all(color: Colors.brown),
-  //           borderRadius: BorderRadius.circular(12),
-  //         ),
-  //         child: const Icon(Icons.add, size: 20, color: Colors.brown),
-  //       ),
-  //     ],
-  //   );
-  // }
 }
