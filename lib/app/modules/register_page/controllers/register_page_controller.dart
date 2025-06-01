@@ -1,26 +1,25 @@
-import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class RegisterPageController extends GetxController {
-  // Text controllers untuk semua input
-  var fullNameController = TextEditingController();
-  var addressController = TextEditingController();
-  var phoneController = TextEditingController();
-  var ageController = TextEditingController();
-  var emailController = TextEditingController();
-  var passController = TextEditingController();
+  // Text controllers
+  final fullNameController = TextEditingController();
+  final addressController = TextEditingController();
+  final phoneController = TextEditingController();
+  final ageController = TextEditingController();
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
 
-  // Loading
-  var isLoading = false.obs;
+  final isLoading = false.obs;
 
-  // Fungsi untuk register
   Future<void> register() async {
     try {
       isLoading.value = true;
 
-      // Validasi sederhana
+      // Validasi
       if (fullNameController.text.isEmpty ||
           emailController.text.isEmpty ||
           passController.text.isEmpty) {
@@ -28,28 +27,46 @@ class RegisterPageController extends GetxController {
         return;
       }
 
-      UserCredential userCredential = await FirebaseAuth.instance
+      // 1. Buat akun Firebase Auth
+      final UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
             email: emailController.text,
             password: passController.text,
           );
+
+      // 2. Simpan data tambahan ke Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+            'uid': userCredential.user!.uid,
+            'fullName': fullNameController.text,
+            'address': addressController.text,
+            'phone': phoneController.text,
+            'age': ageController.text,
+            'email': emailController.text,
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+
+      // 3. Kirim email verifikasi
       await userCredential.user!.sendEmailVerification();
+
       Get.snackbar(
-        "Pendaftaran Berhasil",
-        "Pendaftaran Berhasil Silahkan Cek Email Anda",
+        "Berhasil",
+        "Pendaftaran berhasil! Silakan cek email Anda",
+        snackPosition: SnackPosition.BOTTOM,
       );
+
       Get.offAllNamed('/login-page');
     } catch (e) {
-      // Registrasi gagal -> tampilkan animasi error
       await Get.dialog(
         Dialog(
           backgroundColor: Colors.transparent,
           child: Lottie.asset('assets/lottie/error.json', repeat: false),
         ),
       );
-
       Get.snackbar(
-        "Pendaftaran Gagal",
+        "Gagal",
         e.toString(),
         backgroundColor: Colors.red,
         colorText: Colors.white,

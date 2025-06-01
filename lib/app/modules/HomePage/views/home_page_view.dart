@@ -40,13 +40,10 @@ class HomePageView extends GetView<HomePageController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          'assets/logo.png',
-          width: 80,
-          height: 80,
-        ),
+        Image.asset('assets/logo.png', width: 80, height: 80),
         Row(
           children: [
+            // Icon untuk keranjang belanja
             IconButton(
               icon: const Icon(
                 Icons.shopping_cart,
@@ -55,9 +52,47 @@ class HomePageView extends GetView<HomePageController> {
               ),
               onPressed: () => Get.toNamed(Routes.KERANJANG),
             ),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () => controller.logout(),
+
+            // PopupMenuButton untuk dropdown Akun dan Logout
+            PopupMenuButton<String>(
+              icon: const Icon(
+                Icons.account_circle,
+                size: 30,
+                color: Colors.brown,
+              ),
+              onSelected: (value) {
+                if (value == 'account') {
+                  // Arahkan ke halaman akun
+                  Get.toNamed(Routes.ACCOUNT);
+                } else if (value == 'logout') {
+                  // Logout dan arahkan ke halaman login
+                  controller
+                      .logout(); // Pastikan ada method logout di controller
+                }
+              },
+              itemBuilder:
+                  (context) => [
+                    PopupMenuItem<String>(
+                      value: 'account',
+                      child: Row(
+                        children: const [
+                          Icon(Icons.account_circle, color: Colors.brown),
+                          SizedBox(width: 10),
+                          Text('Akun Saya'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'logout',
+                      child: Row(
+                        children: const [
+                          Icon(Icons.logout, color: Colors.brown),
+                          SizedBox(width: 10),
+                          Text('Logout'),
+                        ],
+                      ),
+                    ),
+                  ],
             ),
           ],
         ),

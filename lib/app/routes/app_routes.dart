@@ -12,6 +12,8 @@ abstract class Routes {
   static const EDIT_ROTI = _Paths.EDIT_ROTI;
   static const DETAIL_ROTI = _Paths.DETAIL_ROTI;
   static const KERANJANG = _Paths.KERANJANG;
+  static const ACCOUNT = _Paths.ACCOUNT;
+  static const ADD_ADDRESS = _Paths.ADD_ADDRESS;
 }
 
 abstract class _Paths {
@@ -25,4 +27,6 @@ abstract class _Paths {
   static const EDIT_ROTI = '/edit-roti';
   static const DETAIL_ROTI = '/detail-roti';
   static const KERANJANG = '/keranjang';
+  static const ACCOUNT = '/account';
+  static const ADD_ADDRESS = '/add-address';
 }
