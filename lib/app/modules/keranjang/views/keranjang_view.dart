@@ -212,10 +212,20 @@ class KeranjangView extends StatelessWidget {
                           controller.selectedIds.isEmpty
                               ? null
                               : () {
-                                // Navigasi ke halaman Checkout
+                                // Filter item yang dipilih
+                                final selectedItems =
+                                    controller.items
+                                        .where(
+                                          (item) => controller.selectedIds
+                                              .contains(item['id']),
+                                        )
+                                        .toList();
+
+                                // Navigasi ke halaman checkout, bawa selectedItems sebagai argumen
                                 Get.toNamed(
                                   '/checkout',
-                                ); // Arahkan ke halaman Checkout
+                                  arguments: selectedItems,
+                                );
                               },
                       child: const Text(
                         'Pesan Sekarang',

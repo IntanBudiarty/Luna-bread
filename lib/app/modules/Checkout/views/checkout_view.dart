@@ -36,6 +36,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   @override
+  final List<dynamic> cartItems = Get.arguments ?? [];
   Widget build(BuildContext context) {
     final accountController = Get.put(AccountController());
     final keranjangController = Get.find<KeranjangController>();
@@ -56,12 +57,10 @@ class _CheckoutViewState extends State<CheckoutView> {
           return const Center(child: Text('Data pengguna tidak ditemukan'));
         }
 
-        final cartItems = keranjangController.items;
-        double totalAmount = 0;
-        cartItems.forEach((item) {
-          double harga = double.tryParse(item['price'].toString()) ?? 0.0;
-          int jumlah = item['quantity'] ?? 1;
-          totalAmount += harga * jumlah;
+        final double totalAmount = cartItems.fold(0, (total, item) {
+          final harga = double.tryParse(item['price'].toString()) ?? 0.0;
+          final jumlah = item['quantity'] ?? 1;
+          return total + (harga * jumlah);
         });
 
         return SingleChildScrollView(
@@ -172,7 +171,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        item['name'] ?? 'Nama tidak tersedia',
+                                        item['bread'] ?? 'Nama tidak tersedia',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
