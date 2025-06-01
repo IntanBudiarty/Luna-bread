@@ -102,5 +102,10 @@ class AppPages {
       page: () => PaymentMethodDropdown(),
       binding: PaymentMethodDropdownBinding(),
     ),
+    GetPage(
+      name: _Paths.EDIT_ACCOUNT,
+      page: () => EditAccountView(),
+      binding: EditAccountBinding(),
+    ),
   ];
 }
