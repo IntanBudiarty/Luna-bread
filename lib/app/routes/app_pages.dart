@@ -8,6 +8,8 @@ import '../modules/Checkout/bindings/checkout_binding.dart';
 import '../modules/Checkout/views/checkout_view.dart';
 import '../modules/HomePage/bindings/home_page_binding.dart';
 import '../modules/HomePage/views/home_page_view.dart';
+import '../modules/Orders/bindings/orders_binding.dart';
+import '../modules/Orders/views/orders_view.dart';
 import '../modules/detail_roti/bindings/detail_roti_binding.dart';
 import '../modules/detail_roti/views/detail_roti_view.dart';
 import '../modules/edit_account/bindings/edit_account_binding.dart';
@@ -94,7 +96,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.CHECKOUT,
-      page: () =>  CheckoutView(),
+      page: () => CheckoutView(),
       binding: CheckoutBinding(),
     ),
     GetPage(
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.EDIT_ACCOUNT,
       page: () => EditAccountView(),
       binding: EditAccountBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORDERS,
+      page: () => OrdersView(),
+      binding: OrdersBinding(),
     ),
   ];
 }

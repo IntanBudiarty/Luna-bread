@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toko_roti/app/modules/Account/controllers/account_controller.dart';
+import 'package:toko_roti/app/modules/Orders/views/orders_view.dart';
 import 'package:toko_roti/app/modules/keranjang/controllers/keranjang_controller.dart';
 import 'package:toko_roti/app/modules/payment_method_dropdown/views/payment_method_dropdown_view.dart';
 import 'package:image_picker/image_picker.dart';
@@ -342,15 +343,29 @@ class _CheckoutViewState extends State<CheckoutView> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.snackbar('Berhasil', 'Checkout berhasil');
+                    final orderItems =
+                        cartItems.map((item) {
+                          return {
+                            'bread': item['bread'],
+                            'price':
+                                double.tryParse(item['price'].toString()) ??
+                                0.0, // Pastikan harga dalam double
+                            'quantity': item['quantity'],
+                            'image_url': item['image_url'],
+                          };
+                        }).toList();
+
+                    // Kirim data yang sudah dipastikan memiliki tipe yang sesuai
+                    Get.toNamed(
+                      '/orders',
+                      arguments: {
+                        'items': orderItems,
+                        'total':
+                            totalAmount, // Pastikan totalAmount adalah double
+                      },
+                    );
+                    Get.snackbar('Berhasil', 'Pesanan berhasil dibuat');
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[700],
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   child: const Text(
                     'PROSES PEMBAYARAN',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

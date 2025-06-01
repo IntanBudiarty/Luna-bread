@@ -17,6 +17,7 @@ abstract class Routes {
   static const PAYMENT_METHOD_DROPDOWN = _Paths.PAYMENT_METHOD_DROPDOWN;
   static const CHECKOUT = _Paths.CHECKOUT;
   static const EDIT_ACCOUNT = _Paths.EDIT_ACCOUNT;
+  static const ORDERS = _Paths.ORDERS;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const PAYMENT_METHOD_DROPDOWN = '/payment-method-dropdown';
   static const CHECKOUT = '/checkout';
   static const EDIT_ACCOUNT = '/edit-account';
+  static const ORDERS = '/orders';
 }
