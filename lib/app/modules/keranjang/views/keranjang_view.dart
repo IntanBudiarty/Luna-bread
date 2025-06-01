@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toko_roti/app/routes/app_pages.dart';
 import '../controllers/keranjang_controller.dart';
 
 class KeranjangView extends StatelessWidget {
@@ -11,7 +12,12 @@ class KeranjangView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Keranjang Belanja'),
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.brown,
+        title: const Text(
+          'Keranjang Belanja',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           Obx(
             () => IconButton(
@@ -31,6 +37,7 @@ class KeranjangView extends StatelessWidget {
           ),
         ],
       ),
+      backgroundColor: const Color(0xFFEBDED4),
       body: Column(
         children: [
           Expanded(
@@ -104,6 +111,7 @@ class KeranjangView extends StatelessWidget {
                                 children: [
                                   Text(
                                     item['bread'] ?? 'Produk',
+                                    maxLines: 3,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -122,13 +130,13 @@ class KeranjangView extends StatelessWidget {
                             ),
 
                             // Kontrol Jumlah
-                            Row(
+                            Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.remove, size: 20),
+                                  icon: const Icon(Icons.add, size: 20),
                                   onPressed:
-                                      () => controller.kurangJumlah(index),
+                                      () => controller.tambahJumlah(index),
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
                                 ),
@@ -141,9 +149,9 @@ class KeranjangView extends StatelessWidget {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.add, size: 20),
+                                  icon: const Icon(Icons.remove, size: 20),
                                   onPressed:
-                                      () => controller.tambahJumlah(index),
+                                      () => controller.kurangJumlah(index),
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
                                 ),
@@ -223,7 +231,7 @@ class KeranjangView extends StatelessWidget {
 
                                 // Navigasi ke halaman checkout, bawa selectedItems sebagai argumen
                                 Get.toNamed(
-                                  '/checkout',
+                                  Routes.CHECKOUT,
                                   arguments: selectedItems,
                                 );
                               },
