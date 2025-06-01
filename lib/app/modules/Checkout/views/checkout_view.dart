@@ -6,7 +6,6 @@ import 'package:toko_roti/app/modules/payment_method_dropdown/views/payment_meth
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:toko_roti/app/routes/app_pages.dart';
 
 class CheckoutView extends StatefulWidget {
   const CheckoutView({super.key});

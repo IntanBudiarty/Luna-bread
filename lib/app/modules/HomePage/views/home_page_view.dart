@@ -10,28 +10,101 @@ class HomePageView extends GetView<HomePageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.toNamed(Routes.TAMBAH_ROTI);
-        },
-        backgroundColor: Colors.brown,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
       backgroundColor: const Color(0xFFEBDED4),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 20),
-              _buildSearchBar(),
-              const SizedBox(height: 20),
-              _buildFeaturedProducts(),
-            ],
+      body: SafeArea(
+        bottom: false, // Disable bottom safe area to handle it manually
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                const SizedBox(height: 20),
+                _buildSearchBar(),
+                const SizedBox(height: 20),
+                _buildFeaturedProducts(),
+                const SizedBox(height: 80), // Add space for bottom navigation
+              ],
+            ),
           ),
         ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0), // Add bottom padding
+        child: _buildBottomNavigationBar(),
+      ),
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+      ), // Add horizontal margin
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20), // More rounded corners
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 15,
+            spreadRadius: 2,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavButton(
+            icon: Icons.home,
+            label: 'Home',
+            isActive: true,
+            onTap: () {},
+          ),
+          _buildNavButton(
+            icon: Icons.add_circle_outline,
+            label: 'Tambah',
+            onTap: () => Get.toNamed(Routes.TAMBAH_ROTI),
+          ),
+          _buildNavButton(
+            icon: Icons.shopping_cart,
+            label: 'Keranjang',
+            onTap: () => Get.toNamed(Routes.KERANJANG),
+          ),
+          _buildNavButton(
+            icon: Icons.person_outline,
+            label: 'Profil',
+            onTap: () => Get.toNamed(Routes.ACCOUNT),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavButton({
+    required IconData icon,
+    required String label,
+    bool isActive = false,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: isActive ? Colors.brown : Colors.grey, size: 28),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.brown : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -40,65 +113,49 @@ class HomePageView extends GetView<HomePageController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset('assets/logo.png', width: 80, height: 80),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Icon untuk keranjang belanja
-            IconButton(
-              icon: const Icon(
-                Icons.shopping_cart,
-                size: 30,
-                color: Colors.brown,
+            Text(
+              'Selamat Datang',
+              style: TextStyle(
+                color: Colors.brown.withOpacity(0.7),
+                fontSize: 14,
               ),
-              onPressed: () => Get.toNamed(Routes.KERANJANG),
             ),
-
-            // PopupMenuButton untuk dropdown Akun dan Logout
-            PopupMenuButton<String>(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              icon: const Icon(
-                Icons.account_circle,
-                size: 30,
+            const Text(
+              'LUNA BREAD',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
                 color: Colors.brown,
               ),
-              onSelected: (value) {
-                if (value == 'account') {
-                  // Arahkan ke halaman akun
-                  Get.toNamed(Routes.ACCOUNT);
-                } else if (value == 'logout') {
-                  // Logout dan arahkan ke halaman login
-                  controller
-                      .logout(); // Pastikan ada method logout di controller
-                }
-              },
-              itemBuilder:
-                  (context) => [
-                    PopupMenuItem<String>(
-                      value: 'account',
-                      child: Row(
-                        children: const [
-                          Icon(Icons.account_circle, color: Colors.brown),
-                          SizedBox(width: 10),
-                          Text('Akun Saya'),
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'logout',
-                      child: Row(
-                        children: const [
-                          Icon(Icons.logout, color: Colors.brown),
-                          SizedBox(width: 10),
-                          Text('Logout'),
-                        ],
-                      ),
-                    ),
-                  ],
             ),
           ],
         ),
+        Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                image: const DecorationImage(
+                  image: AssetImage('assets/logo.png'),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                controller.logout();
+              },
+              icon: Icon(Icons.logout, color: Colors.brown),
+            ),
+          ],
+        )
+       
       ],
     );
   }
@@ -107,11 +164,11 @@ class HomePageView extends GetView<HomePageController> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(15), // Pastikan bentuknya bulat
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 15,
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 10,
             offset: const Offset(0, 5),
           ),
         ],
@@ -120,16 +177,30 @@ class HomePageView extends GetView<HomePageController> {
         onChanged: (value) {
           controller.searchQuery.value = value;
         },
-        decoration: const InputDecoration(
-          hintText: 'Search',
-          hintStyle: TextStyle(color: Colors.grey),
-          prefixIcon: Icon(Icons.search, color: Colors.grey),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        decoration: InputDecoration(
+          hintText: 'Cari roti favorit...',
+          hintStyle: const TextStyle(color: Colors.grey),
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          border:
+              InputBorder.none, // Hindari Outline agar bentuk container berlaku
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 20,
+          ),
+          suffixIcon:
+              controller.searchQuery.isNotEmpty
+                  ? IconButton(
+                    icon: const Icon(Icons.clear, color: Colors.grey),
+                    onPressed: () {
+                      controller.searchQuery.value = '';
+                    },
+                  )
+                  : null,
         ),
       ),
     );
   }
+
 
   Widget _buildFeaturedProducts() {
     return Column(
@@ -138,9 +209,9 @@ class HomePageView extends GetView<HomePageController> {
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: Text(
-            'Produk Kami',
+            'Produk Terbaru',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.brown,
             ),
@@ -151,11 +222,18 @@ class HomePageView extends GetView<HomePageController> {
           stream: controller.breadStream.value,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.brown),
+              );
             }
 
             if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(
+                child: Text(
+                  'Error: ${snapshot.error}',
+                  style: const TextStyle(color: Colors.brown),
+                ),
+              );
             }
 
             return Obx(() {
@@ -169,14 +247,14 @@ class HomePageView extends GetView<HomePageController> {
 
               if (breads.isEmpty) {
                 return Center(
-                  child: Text(
-                    controller.searchQuery.value.isEmpty
-                        ? "BELUM ADA DATA ROTI"
-                        : "Tidak ditemukan roti dengan nama '${controller.searchQuery.value}'",
-                    style: const TextStyle(
-                      color: Colors.brown,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      controller.searchQuery.value.isEmpty
+                          ? "Belum ada produk roti"
+                          : "Tidak ditemukan roti dengan nama '${controller.searchQuery.value}'",
+                      style: const TextStyle(color: Colors.brown, fontSize: 16),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 );
@@ -187,22 +265,14 @@ class HomePageView extends GetView<HomePageController> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
+                  childAspectRatio: 0.8,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
                 ),
                 itemCount: breads.length,
                 itemBuilder: (context, index) {
                   var data = breads[index].data();
-                  return GestureDetector(
-                    onTap:
-                        () => Get.toNamed(Routes.DETAIL_ROTI, arguments: data),
-                    child: _buildBreadCard(
-                      data,
-                      breads[index].id,
-                      breads[index],
-                    ),
-                  );
+                  return _buildBreadCard(data, breads[index].id, breads[index]);
                 },
               );
             });
@@ -217,124 +287,128 @@ class HomePageView extends GetView<HomePageController> {
     String docId,
     QueryDocumentSnapshot breadDoc,
   ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16),
-                  ),
-                  child: Image.network(
-                    data['image_url'],
-                    height: 160,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder:
-                        (context, error, stackTrace) =>
-                            const Icon(Icons.broken_image),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  children: [
-                    Text(
-                      data['bread'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Rp ${data['price']}",
-                      style: const TextStyle(
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      data['description'],
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Row(
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: () => Get.toNamed(Routes.DETAIL_ROTI, arguments: data),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.brown,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  width: 30,
-                  height: 30,
-                  child: IconButton(
-                    onPressed: () {
-                      Get.toNamed(Routes.EDIT_ROTI, arguments: breadDoc);
-                    },
-                    icon: const Icon(Icons.edit, color: Colors.white, size: 19),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(15),
+                    ),
+                    child: Image.network(
+                      data['image_url'],
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder:
+                          (context, error, stackTrace) => Container(
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: Icon(
+                                Icons.broken_image,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 5),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.brown,
-                    borderRadius: BorderRadius.circular(5),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data['bread'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Rp ${data['price']}",
+                        style: const TextStyle(
+                          color: Colors.brown,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
                   ),
-                  width: 30,
-                  height: 30,
-                  child: IconButton(
-                    onPressed: () {
-                      Get.defaultDialog(
-                        title: "Konfirmasi",
-                        middleText: "Yakin ingin menghapus roti ini?",
-                        textConfirm: "Ya",
-                        textCancel: "Batal",
-                        confirmTextColor: Colors.white,
-                        onConfirm: () {
-                          controller.hapusRoti(docId);
-                          Get.back();
-                        },
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: 19,
-                    ),
+                ),
+                // Edit and Delete buttons at bottom right
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.brown,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.edit,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Get.toNamed(Routes.EDIT_ROTI, arguments: breadDoc);
+                          },
+                          padding: EdgeInsets.zero,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.brown,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Get.defaultDialog(
+                              title: "Konfirmasi",
+                              middleText: "Yakin ingin menghapus roti ini?",
+                              textConfirm: "Ya",
+                              textCancel: "Batal",
+                              confirmTextColor: Colors.white,
+                              buttonColor: Colors.brown,
+                              onConfirm: () {
+                                controller.hapusRoti(docId);
+                                Get.back();
+                              },
+                            );
+                          },
+                          padding: EdgeInsets.zero,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
