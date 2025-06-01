@@ -14,6 +14,7 @@ abstract class Routes {
   static const KERANJANG = _Paths.KERANJANG;
   static const ACCOUNT = _Paths.ACCOUNT;
   static const ADD_ADDRESS = _Paths.ADD_ADDRESS;
+  static const EDIT_ACCOUNT = _Paths.EDIT_ACCOUNT;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const KERANJANG = '/keranjang';
   static const ACCOUNT = '/account';
   static const ADD_ADDRESS = '/add-address';
+  static const EDIT_ACCOUNT = '/edit-account';
 }

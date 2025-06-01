@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:toko_roti/app/routes/app_pages.dart';
 import '../controllers/account_controller.dart';
 
 class AccountView extends StatelessWidget {
@@ -55,7 +56,7 @@ class AccountView extends StatelessWidget {
               right: 16,
               bottom: 16,
               child: ElevatedButton(
-                onPressed: () => Get.toNamed('/edit-profile'),
+                onPressed: () => Get.toNamed(Routes.EDIT_ACCOUNT),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.brown,
                   padding: const EdgeInsets.symmetric(vertical: 16),
