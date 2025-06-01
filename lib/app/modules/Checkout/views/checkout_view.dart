@@ -396,6 +396,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                       color: Colors.white,
                     ),
                   ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),

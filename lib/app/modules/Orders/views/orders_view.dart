@@ -14,10 +14,12 @@ class OrdersView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pesanan Saya'),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Pesanan Saya', style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        backgroundColor: Colors.blue[700],
+        backgroundColor: Colors.brown,
       ),
+      backgroundColor: const Color(0xFFEBDED4),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -33,11 +35,12 @@ class OrdersView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Status Pesanan',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: Colors.brown[700]
                       ),
                     ),
                     Chip(
@@ -67,12 +70,12 @@ class OrdersView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Detail Pesanan',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: Colors.brown[700],
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -123,14 +126,18 @@ class OrdersView extends StatelessWidget {
                                       ),
                                       Text(
                                         '${jumlah}x Rp ${harga.toStringAsFixed(0)}',
+                                        style: TextStyle(
+                                          color: Colors.brown[700],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
                                 Text(
                                   'Rp ${subtotal.toStringAsFixed(0)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.brown[700]
                                   ),
                                 ),
                               ],
@@ -157,7 +164,7 @@ class OrdersView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue[700],
+                            color: Colors.brown[700],
                           ),
                         ),
                       ],
@@ -178,7 +185,7 @@ class OrdersView extends StatelessWidget {
                   Get.offAll(() => HomePageView());
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[700],
+                  backgroundColor: Colors.brown,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -186,7 +193,11 @@ class OrdersView extends StatelessWidget {
                 ),
                 child: const Text(
                   'Kembali ke Halaman Utama',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
