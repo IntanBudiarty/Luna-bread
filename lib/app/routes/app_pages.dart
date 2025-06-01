@@ -98,7 +98,7 @@ class AppPages {
       binding: CheckoutBinding(),
     ),
     GetPage(
-      name: _Paths PAYMENT_METHOD_DROPDOWN,
+      name: _Paths.PAYMENT_METHOD_DROPDOWN
       page: () => PaymentMethodDropdown(),
       binding: PaymentMethodDropdownBinding(),
     ),
