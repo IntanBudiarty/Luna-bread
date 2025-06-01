@@ -36,7 +36,7 @@ class AccountView extends StatelessWidget {
         return Stack(
           children: [
             SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 160),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -51,20 +51,71 @@ class AccountView extends StatelessWidget {
                 ],
               ),
             ),
+
+            // Bottom Buttons
             Positioned(
               left: 16,
               right: 16,
               bottom: 16,
-              child: ElevatedButton(
-                onPressed: () => Get.toNamed(Routes.EDIT_ACCOUNT),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.brown,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  'Edit Profil',
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: Column(
+                children: [
+                  // View Orders Button
+                  ElevatedButton(
+                    onPressed: () => Get.toNamed(Routes.ORDERS),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange[700],
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.shopping_bag, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          'Lihat Pesanan Saya',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Edit Profile Button
+                  ElevatedButton(
+                    onPressed: () => Get.toNamed(Routes.EDIT_ACCOUNT),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.brown,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.edit, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          'Edit Profil',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -184,9 +235,9 @@ class AccountView extends StatelessWidget {
             );
           }).toList(),
         ],
-    );
+      );
     });
-}
+  }
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
